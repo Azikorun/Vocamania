@@ -1,11 +1,11 @@
 {
-    "name": "Vocabulary Quiz App",
-    "short_name": "VocabQuiz",
+    "name": "NGSL Quiz App",
+    "short_name": "NGSL lexicon",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#6C63FF",
-    "description": "Learn vocabulary through quizzes and flashcards!",
+    "description": "Learn vocabulary through quizzes",
     "icons": [
       {
         "src": "icon-192.png",
