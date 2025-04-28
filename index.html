@@ -12,7 +12,7 @@
 <body>
 
     <h1 id="page-title">Choose a Level</h1>
-
+    <button id="mute-toggle" style="position: fixed; top: 20px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer;">🔇</button>
     <div id="level-select">
         <div id="levels"></div>
     </div>
@@ -30,6 +30,11 @@
     </div>
 
     <div id="result"></div>
+    <audio id="correct-sound" src="correct.mp3"></audio>
+    <audio id="wrong-sound" src="wrong.mp3"></audio>
+    <audio id="tick-sound" src="tick.mp3" loop></audio>
+    <audio id="levelup-sound" src="levelup.mp3"></audio>
+
 
     <!-- THEME TOGGLE BUTTON (must be before scripts) -->
     <div id="theme-toggle" class="toggle-switch">
