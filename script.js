@@ -2,13 +2,22 @@ let currentLevel = "";
 let questionsList = [];
 let index = 0;
 let correct = 0;
+let isMuted = false;
 let timer;
 let timeLeft = 20;
+
+// Load sound elements
+const correctSound = document.getElementById('correct-sound');
+const wrongSound = document.getElementById('wrong-sound');
+const tickSound = document.getElementById('tick-sound');
+const levelupSound = document.getElementById('levelup-sound');
 
 document.addEventListener("DOMContentLoaded", function() {
     showLevels();
     setupThemeToggle();
     applySavedTheme();
+    setupMuteToggle();
+    loadMuteSetting();
 });
 
 function showLevels() {
@@ -92,12 +101,20 @@ function startTimer() {
         timeLeft--;
         timerBar.style.width = `${(timeLeft / 20) * 100}%`;
 
+        if (timeLeft === 4) {
+            if (!isMuted) {
+                tickSound.play();
+            }
+        }
+
         if (timeLeft <= 5) {
             timerBar.classList.add('red-flash');
         }
 
         if (timeLeft <= 0) {
             clearInterval(timer);
+            tickSound.pause();
+            tickSound.currentTime = 0;
             autoNextQuestion();
         }
     }, 1000);
@@ -105,7 +122,10 @@ function startTimer() {
 
 function selectAnswer(selected) {
     clearInterval(timer);
-
+    if (!isMuted) {
+        tickSound.pause();
+        tickSound.currentTime = 0;
+    }
     const buttons = document.querySelectorAll('#options button');
     const correctAnswer = questionsList[index].RightAnswer;
 
@@ -120,8 +140,15 @@ function selectAnswer(selected) {
 
     if (selected === correctAnswer) {
         correct++;
+        if (!isMuted) {
+            correctSound.play(); 
+        }
+    } else {
+        if (!isMuted) {
+            wrongSound.play();  
+        }
     }
-
+    
     setTimeout(() => {
         index++;
         showQuestion();
@@ -141,14 +168,18 @@ function finishQuiz() {
     document.getElementById('quiz').style.display = 'none';
     const score = (correct / questionsList.length) * 100;
     document.getElementById('result').style.display = 'block';
-    document.getElementById('result').innerHTML = `<h2>Your Score: ${score.toFixed(2)}%</h2>`;
+    document.getElementById('result').innerHTML = `<h2>Your Score: ${Math.round(score)}%</h2>`;
 
-    if (score >= 80) {
+    if (score >= 90) {
+        if (!isMuted) {
+            levelupSound.play(); 
+        }
         document.getElementById('result').innerHTML += `<p>Congratulations! Next level unlocked!</p>`;
         unlockNextLevel();
     } else {
         document.getElementById('result').innerHTML += `<p>Try again to pass!</p>`;
     }
+    
     document.getElementById('result').innerHTML += `<button onclick="location.reload()">Go Back</button>`;
 }
 
@@ -187,5 +218,22 @@ function applySavedTheme() {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-mode');
+    }
+}
+function setupMuteToggle() {
+    const muteButton = document.getElementById('mute-toggle');
+    muteButton.addEventListener('click', () => {
+        isMuted = !isMuted;
+        muteButton.textContent = isMuted ? '🔈' : '🔇';
+        localStorage.setItem('mute', isMuted ? 'true' : 'false');
+    });
+}
+
+function loadMuteSetting() {
+    const muteSetting = localStorage.getItem('mute');
+    if (muteSetting === 'true') {
+        isMuted = true;
+        const muteButton = document.getElementById('mute-toggle');
+        muteButton.textContent = '🔈';
     }
 }
