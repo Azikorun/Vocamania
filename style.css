@@ -20,12 +20,15 @@ h1, h2 {
 }
 
 #levels {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
     gap: 20px;
-    align-items: center;
+    justify-items: center;
     margin-top: 20px;
+    width: 100%;
+    max-width: 500px;
 }
+
 
 .level-button {
     background: linear-gradient(145deg, #e0e0e0, #ffffff);
