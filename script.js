@@ -180,7 +180,13 @@ function finishQuiz() {
         document.getElementById('result').innerHTML += `<p>Try again to pass!</p>`;
     }
     
-    document.getElementById('result').innerHTML += `<button onclick="location.reload()">Go Back</button>`;
+    document.getElementById('result').innerHTML += `
+    <div style="margin-top: 30px;">
+    <button id="return-button" onclick="returnToLevels()"style="font-size: 40px;">↩️</button>
+    <button id="retry-button" onclick="retryLevel()"style="font-size: 40px;">🔄</button>
+    <button id="next-button" onclick="goToNextLevel()"style="font-size: 40px;">➡️</button>
+</div>
+`;
 }
 
 function unlockNextLevel() {
@@ -235,5 +241,38 @@ function loadMuteSetting() {
         isMuted = true;
         const muteButton = document.getElementById('mute-toggle');
         muteButton.textContent = '🔈';
+    }
+}
+
+
+function returnToLevels() {
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('quiz').style.display = 'none';
+    document.getElementById('level-select').style.display = 'block';
+    document.getElementById('page-title').style.display = 'block';
+}
+
+function retryLevel() {
+    index = 0;
+    correct = 0;
+    questionsList = shuffleArray(questions[currentLevel]).slice(0, 20);
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('quiz').style.display = 'block';
+    showQuestion();
+}
+
+function goToNextLevel() {
+    const currentLevelNum = parseInt(currentLevel.replace('level ', ''));
+    const nextLevel = `level ${currentLevelNum + 1}`;
+    if (questions[nextLevel]) {
+        currentLevel = nextLevel;
+        questionsList = shuffleArray(questions[nextLevel]).slice(0, 20);
+        index = 0;
+        correct = 0;
+        document.getElementById('result').style.display = 'none';
+        document.getElementById('quiz').style.display = 'block';
+        showQuestion();
+    } else {
+        alert("Next level is not available.");
     }
 }
