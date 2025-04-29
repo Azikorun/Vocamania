@@ -163,30 +163,32 @@ function autoNextQuestion() {
         showQuestion();
     }, 1000);
 }
-
 function finishQuiz() {
     document.getElementById('quiz').style.display = 'none';
     const score = (correct / questionsList.length) * 100;
     document.getElementById('result').style.display = 'block';
-    document.getElementById('result').innerHTML = `<h2>Your Score: ${Math.round(score)}%</h2>`;
+
+    let resultHTML = `<h2>Your Score: ${Math.round(score)}%</h2>`;
 
     if (score >= 90) {
         if (!isMuted) {
-            levelupSound.play(); 
+            levelupSound.play();
         }
-        document.getElementById('result').innerHTML += `<p>Congratulations! Next level unlocked!</p>`;
+        resultHTML += `<p>Congratulations! Next level unlocked!</p>`;
         unlockNextLevel();
     } else {
-        document.getElementById('result').innerHTML += `<p>Try again to pass!</p>`;
+        resultHTML += `<p>Try again to pass!</p>`;
     }
-    
-    document.getElementById('result').innerHTML += `
-    <div style="margin-top: 30px;">
-    <button id="return-button" onclick="returnToLevels()"style="font-size: 40px;">↩️</button>
-    <button id="retry-button" onclick="retryLevel()"style="font-size: 40px;">🔄</button>
-    <button id="next-button" onclick="goToNextLevel()"style="font-size: 40px;">➡️</button>
-</div>
-`;
+
+    resultHTML += `
+        <div style="margin-top: 30px;">
+            <button id="return-button" onclick="returnToLevels()" style="font-size: 40px;">↩️</button>
+            <button id="retry-button" onclick="retryLevel()" style="font-size: 40px;">🔄</button>
+            ${score >= 90 ? `<button id="next-button" onclick="goToNextLevel()" style="font-size: 40px;">➡️</button>` : ''}
+        </div>
+    `;
+
+    document.getElementById('result').innerHTML = resultHTML;
 }
 
 function unlockNextLevel() {
