@@ -21,9 +21,10 @@ h1, h2 {
 
 #levels {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    grid-template-columns: repeat(3, 1fr); /* 3 buttons per row */
     gap: 20px;
     justify-items: center;
+    align-items: center;
     margin-top: 20px;
     width: 100%;
     max-width: 500px;
